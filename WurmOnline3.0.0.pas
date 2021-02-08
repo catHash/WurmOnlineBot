@@ -1,6 +1,5 @@
 program Wurm;
 {$i SRL/SRL.simba}
-{$i SRL/SRL/misc/Debug.simba}
 var
   Width,Height,Failures,Actions,WaitAfterClick : integer;
   MoveSideToSide,MoveForward,ImprovingItems : boolean;
@@ -981,7 +980,7 @@ begin
       result := false;
       Exit;
     end;
-    SetArrayLength(ImproveOptions,10)
+    SetArrayLength(ImproveOptions,10);
     ImproveOptions[Tool_RockShards] := BitmapFromString(37, 8, 'meJzFkltLAkEAhX9ipltBZWpaqWX' +
         '0aCaB2ZMZ1ZOXDcXyVg/Vr1AxNIO8oqH+AZ980ITtg6FBNqK3Wobh' +
         '2zNn5+yeWU3TjIaFPxvaf8QxX11efEynajwWj0WBYCAg9CPf4Xg8f' +
