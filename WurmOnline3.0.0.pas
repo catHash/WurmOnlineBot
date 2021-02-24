@@ -1,8 +1,8 @@
 program Wurm;
-{$i SRL/SRL.simba}
+{$i SRL/OSR.simba}
 var
   WidthExtended,HeightExtended,Failures,Actions,WaitAfterClick,MouseSpeed : integer;
-  Width, Height : Smallint;
+  Width,Height : Smallint;
   MoveSideToSide,MoveForward,ImprovingItems : boolean;
 const
   Tool_Lump = 0;
@@ -39,7 +39,7 @@ const
   Item_Clay = 21;
 procedure ClickScreen;
 begin
-  Mouse.Click(Point((Round(Width div 2),Round(Height div 2)),15, mouse_Right);
+  Mouse.Click(Point(Round(Width div 2),Round(Height div 2)),15, mouse_Right);
 end;
 procedure MoveForwardOneTile;
 begin
@@ -68,7 +68,7 @@ begin
         'Kt/E/Bh7iPCVZdYhdItY2c9zrRDhir4vKjkl9vEzJ+duLmszBg==');
   If (FindBitmapIn(SendOption,X,Y,0,0,Width-1,Height-1)) Then
   begin
-    Keyboard.Send('3');
+    Keyboard.Send('3',0);
     Mouse.Click(X+10,Y+5,mouse_Left);
     writeln(inttostr(x) + ' ' + inttostr(y));
     result := true;
@@ -5044,7 +5044,7 @@ begin
   wait(WaitAfterClick);
   GetClientDimensions(WidthExtended,HeightExtended);
   Width := Smallint (WidthExtended);
-  Height := Smallint (HeightExtended);
+   Height := Smallint (HeightExtended);
   MouseSpeed := 12;
   WaitAfterClick := 1500;
   MoveSideToSide := false;
@@ -5137,7 +5137,7 @@ begin
     //if not Improve(Item_LargeShield) then
     //if not Improve(Item_PracticeDoll) then
     begin
-      //TakeScreenshot('C:\Users\Anonymous\Desktop\Wurm\Screenshots\Wurm');
+    //  TakeScreenshot('C:\Users\Anonymous\Desktop\Wurm\Screenshots\Wurm');
       Failures := Failures + 1;
     end;
     //OrePileToBin;
