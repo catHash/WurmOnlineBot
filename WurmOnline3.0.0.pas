@@ -1,7 +1,8 @@
 program Wurm;
 {$i SRL/SRL.simba}
 var
-  Width,Height,Failures,Actions,WaitAfterClick : integer;
+  WidthExtended,HeightExtended,Failures,Actions,WaitAfterClick,MouseSpeed : integer;
+  Width, Height : Smallint;
   MoveSideToSide,MoveForward,ImprovingItems : boolean;
 const
   Tool_Lump = 0;
@@ -38,7 +39,7 @@ const
   Item_Clay = 21;
 procedure ClickScreen;
 begin
-  Mouse(Width/2,Height/2,15,15,false);
+  Mouse.Click(Point((Round(Width div 2),Round(Height div 2)),15, mouse_Right);
 end;
 procedure MoveForwardOneTile;
 begin
@@ -67,8 +68,8 @@ begin
         'Kt/E/Bh7iPCVZdYhdItY2c9zrRDhir4vKjkl9vEzJ+duLmszBg==');
   If (FindBitmapIn(SendOption,X,Y,0,0,Width-1,Height-1)) Then
   begin
-    SendKeys('3',0);
-    Mouse(X+10,Y+5,0,0,true);
+    Keyboard.Send('3');
+    Mouse.Click(X+10,Y+5,mouse_Left);
     writeln(inttostr(x) + ' ' + inttostr(y));
     result := true;
   end
@@ -162,7 +163,7 @@ begin
   result := false;
   message := true;
   repeat
-  if FindColorTolerance(x,y,5792871,Width/2+15,Height-30,Width/2+20,Height-20,20) then
+  if FindColorTolerance(x,y,5792871,intToBox(Width div 2+15,Height-30,Width div 2+20,Height-20),20,colorSetting(2, 0.20, 0.80)) then
   begin
     result := true;
     if message then
@@ -294,7 +295,7 @@ var
 InventoryItemPoints : TPointArray;
 begin
   //writeln('from :'+ inttostr(from.x) + ' ' + inttostr(from.y));
-  if not FindBitmapsSpiralTolerance(Bitmap,width/2,height/2,InventoryItemPoints,From.x,0,From.x+200,Height-1,50) then //125
+  if not FindBitmapsSpiralTolerance(Bitmap,Width div 2,Height div 2,InventoryItemPoints,From.x,0,From.x+200,Height-1,50) then //125
   begin
     writeln('could not find item in inventory');
     SetArrayLength(InventoryItemPoints,1);
@@ -699,7 +700,7 @@ begin
     MoveMouse(IconLocations[0].x+25,IconLocations[0].y);
     GetMousePos(MousePos.x,MousePos.y);
     ClickMouse(MousePos.x,MousePos.y,1);
-    wait(WaitAfterClick/10);
+    wait(WaitAfterClick div 10);
     ClickMouse(MousePos.x,MousePos.y,1);
     result := true;
   end;
@@ -1200,7 +1201,7 @@ begin
       else
       begin
         writeln('option ' + inttostr(ImproveTool) + ' could not be found - check ImproveOptions array');
-        Mouse(Width/2,Height/2,0,0,true);
+        Mouse(Width div 2,Height div 2,0,0,true);
       end;
       if not WaitForActionFinish then
         //Failures := Failures + 1
@@ -2090,7 +2091,7 @@ begin
       writeln('could not find small anvil');
   end;
   if result = false then
-    Mouse(Width/2,Height/2,15,15,true);
+    Mouse(Width div 2,Height div 2,15,15,true);
   FreeBitmap(SmallAnvilIcon);
   FreeBitmap(CreateOption);
   FreeBitmap(LocksOption);
@@ -2190,7 +2191,7 @@ begin
       writeln('could not find small anvil');
   end;
   if result = false then
-    Mouse(Width/2,Height/2,15,15,true);
+    Mouse(Width div 2,Height div 2,15,15,true);
   FreeBitmap(SmallAnvilIcon);
   FreeBitmap(CreateOption);
   FreeBitmap(LocksOption);
@@ -2289,7 +2290,7 @@ begin
       writeln('could not find small anvil');
   end;
   if result = false then
-    Mouse(Width/2,Height/2,15,15,true);
+    Mouse(Width div 2,Height div 2,15,15,true);
   FreeBitmap(SmallAnvilIcon);
   FreeBitmap(CreateOption);
   FreeBitmap(MiscOption);
@@ -2300,7 +2301,7 @@ var
 CreateOption,MiscOption,ArmourChainsOption,X,Y : integer;
 begin
   result := false;
-  Mouse(Width/2,Height/2,0,0,false);
+  Mouse(Width div 2,Height div 2,0,0,false);
   wait(WaitAfterClick);
   CreateOption := BitmapFromString(33, 10, 'meJxtUwkSwyAIfGTQEE3//4xWWK' +
         'BrWofJwMolS+S8hKTpYKXMBOev59F1SQPe1YR8TFJ/53FE4/aaobi' +
@@ -2590,7 +2591,7 @@ begin
       writeln('could not find item icon');
   end;
   if result = false then
-    Mouse(Width/2,Height/2,15,15,true);
+    Mouse(Width div 2,Height div 2,15,15,true);
   FreeBitmap(ItemIcon);
   FreeBitmap(FirstOption);
   FreeBitmap(SecondOption);
@@ -2664,7 +2665,7 @@ begin
       writeln('could not find item icon');
   end;
   if result = false then
-    Mouse(Width/2,Height/2,15,15,true);
+    Mouse(Width div 2,Height div 2,15,15,true);
   FreeBitmap(ItemIcon);
   FreeBitmap(FirstOption);
   FreeBitmap(SecondOption);
@@ -3605,7 +3606,7 @@ begin
         if not Filet(FishLocations[i]) then
         begin;
         FreeBitmap(FishIcon);
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         result := false;
         Exit;
         end
@@ -3655,7 +3656,7 @@ begin
         if not Filet(FishLocations[i]) then
         begin;
         FreeBitmap(CookedMeatIcon);
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         result := false;
         Exit;
         end
@@ -3708,7 +3709,7 @@ begin
       end else
       begin
         if not CreateStaff(LogLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -3769,7 +3770,7 @@ begin
       end else
       begin
         if not CreateShortBow(LogLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -3826,7 +3827,7 @@ begin
       end else
       begin
         if not CreateBow(LogLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -3913,7 +3914,7 @@ begin
       end else
       begin
         if not CreateShaft(LogLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -3996,7 +3997,7 @@ begin
       end else
       begin
         if not CreateTenon(LogLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -4082,7 +4083,7 @@ begin
       begin
         if not CreatePlank(LogLocations[i]) then
         begin
-          Mouse(Width/2,Height/2,15,15,true);
+          Mouse(Width div 2,Height div 2,15,15,true);
           Exit;
         end;
         WaitForActionFinish;
@@ -4178,7 +4179,7 @@ begin
       begin
         if not CreateWhetstone(RockShardLocations[i]) then
         begin
-          Mouse(Width/2,Height/2,15,15,true);
+          Mouse(Width div 2,Height div 2,15,15,true);
           Exit;
         end;
         WaitForActionFinish;
@@ -4273,7 +4274,7 @@ begin
       begin
         if not CreateGrindstone(RockShardLocations[i]) then
         begin
-          Mouse(Width/2,Height/2,15,15,true);
+          Mouse(Width div 2,Height div 2,15,15,true);
           Exit;
         end;
         WaitForActionFinish;
@@ -4365,7 +4366,7 @@ begin
       end else
       begin
       if not CreateArrowShaft(ShaftLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -4456,7 +4457,7 @@ begin
       end else
       begin
       if not CreatePeg(ShaftLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -4571,7 +4572,7 @@ begin
       end else
       begin
         if not Mill(ItemLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -4653,7 +4654,7 @@ begin
       end else
       begin
         if not MixDough(ItemLocations[i]) then
-        Mouse(Width/2,Height/2,15,15,true);
+        Mouse(Width div 2,Height div 2,15,15,true);
         WaitForActionFinish;
         result := true;
       end;
@@ -4948,8 +4949,8 @@ begin
   begin
     MoveMouse(StackPoint.x+25,StackPoint.y+5);
     HoldMouse(StackPoint.x+25,StackPoint.y+5,1);
-    MoveMouse(Width/2,Height/2);
-    ReleaseMouse(Width/2,Height/2,1);
+    MoveMouse(Width div 2,Height div 2);
+    ReleaseMouse(Width div 2,Height div 2,1);
   end;
   if ClickSendButton then
   begin
@@ -4961,8 +4962,8 @@ begin
   begin
     MoveMouse(StackPoint.x+25,StackPoint.y+5);
     HoldMouse(StackPoint.x+25,StackPoint.y+5,1);
-    MoveMouse(Width*2/3,Height/2);
-    ReleaseMouse(Width*2/3,Height/2,1);
+    MoveMouse(Width*2/3,Height div 2);
+    ReleaseMouse(Width*2/3,Height div 2,1);
   end;
   wait(700);
   end;
@@ -5041,7 +5042,9 @@ begin
   Failures := 0;
   Actions := 0;
   wait(WaitAfterClick);
-  GetClientDimensions(Width,Height);
+  GetClientDimensions(WidthExtended,HeightExtended);
+  Width := Smallint (WidthExtended);
+  Height := Smallint (HeightExtended);
   MouseSpeed := 12;
   WaitAfterClick := 1500;
   MoveSideToSide := false;
@@ -5134,7 +5137,7 @@ begin
     //if not Improve(Item_LargeShield) then
     //if not Improve(Item_PracticeDoll) then
     begin
-      TakeScreenshot('C:\Users\Anonymous\Desktop\Wurm\Screenshots\Wurm');
+      //TakeScreenshot('C:\Users\Anonymous\Desktop\Wurm\Screenshots\Wurm');
       Failures := Failures + 1;
     end;
     //OrePileToBin;
@@ -5207,6 +5210,6 @@ begin
   until(false);
 end;
 begin
-  SetupSRL;
+  //SetupSRL;
   MainLoop;
 end.
